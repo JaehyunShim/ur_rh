@@ -1,0 +1,16 @@
+<package format="2">
+  <name>ur_rh_bringup</name>
+  <version>1.0.1</version>
+  <description>
+    ROS package for ur_rh_bringup.
+  </description>
+
+  <author email="jhshim@robotis.com">Ryan Shim</author>
+  <license>BSD</license>
+  <url type="website">http://ros.org/wiki/ur_rh</url>
+  <maintainer email="jhshim@robotis.com">Ryan Shim</maintainer>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>ur_bringup</exec_depend>
+  <exec_depend>rh_p12_rn_a_manager</exec_depend>
+</package>

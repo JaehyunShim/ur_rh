@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>ur_rh_description</name>
+  <version>1.0.1</version>
+  <description>
+    ROS package for ur_rh_description.
+  </description>
+
+  <author email="jhshim@robotis.com">Ryan Shim</author>
+  <license>BSD</license>
+  <url type="website">http://ros.org/wiki/ur_rh</url>
+  <maintainer email="jhshim@robotis.com">Ryan Shim</maintainer>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>joint_state_publisher</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>rviz</exec_depend>
+  <exec_depend>urdf</exec_depend>
+  <exec_depend>xacro</exec_depend>
+</package>

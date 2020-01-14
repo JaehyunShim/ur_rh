@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>ur_rh_gazebo</name>
+  <version>1.0.1</version>
+  <description>
+    ROS package for ur_rh_gazebo.
+  </description>
+
+  <author email="jhshim@robotis.com">Ryan Shim</author>
+  <license>BSD</license>
+  <url type="website">http://ros.org/wiki/ur_rh</url>
+  <maintainer email="jhshim@robotis.com">Ryan Shim</maintainer>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>controller_manager</exec_depend>
+  <exec_depend>effort_controllers</exec_depend>
+  <exec_depend>joint_state_controller</exec_depend>
+  <exec_depend>joint_trajectory_controller</exec_depend>
+  <exec_depend>gazebo_ros</exec_depend>
+  <exec_depend>gazebo_ros_control</exec_depend>
+  <exec_depend>position_controllers</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>rostopic</exec_depend>
+  <exec_depend>ur_e_description</exec_depend>
+</package>
