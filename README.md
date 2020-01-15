@@ -31,6 +31,12 @@ $ roslaunch ur_rh_bringup ur_rh_bringup.launch
 
 (Gazebo)
 $ roslaunch ur_rh_gazebo ur_rh_gazebo.launch
+
+(Gazebo)
+# Close gripper
+$ rostopic pub -1 /rh_p12_rn_a/rh_p12_rn_a_position/command std_msgs/Float64 "data: 1.1"
+# Open gripper
+$ rostopic pub -1 /rh_p12_rn_a/rh_p12_rn_a_position/command std_msgs/Float64 "data: 0.0"
 ```
 
 ### Reference
