@@ -30,17 +30,23 @@ $ cd ~/catkin_ws && catkin_make
 # Bringup
 $ roslaunch ur_rh_bringup ur_rh_bringup.launch
 # MoveIt
-$ roslaunch ur5_moveit_config ur5_moveit_planning_execution.launch
-$ roslaunch ur5_moveit_config moveit_rviz.launch config:=true
+$ roslaunch ur5_e_moveit_config ur5_e_moveit_planning_execution.launch
+$ roslaunch ur5_e_moveit_config moveit_rviz.launch config:=true
 
 (Gazebo Simulation)
 # Gazebo
 $ roslaunch ur_rh_gazebo ur_rh_gazebo.launch
 # MoveIt
-roslaunch ur5_moveit_config ur5_moveit_planning_execution.launch sim:=true
-$ roslaunch ur5_moveit_config moveit_rviz.launch config:=true
+$ roslaunch ur5_e_moveit_config ur5_e_moveit_planning_execution.launch sim:=true
+$ roslaunch ur5_e_moveit_config moveit_rviz.launch config:=true
 # Control gripper
 $ rostopic pub -1 /rh_p12_rn_a/rh_p12_rn_a_position/command std_msgs/Float64 "data: 1.1"
+
+(Gazebo Simulation)
+# Gazebo
+$ roslaunch ur_rh_gazebo ur_rh_gazebo.launch
+# GUI
+$ roslaunch ur_rh_gui ur_rh_gui.launch
 ```
 
 ### Reference
