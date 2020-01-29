@@ -46,7 +46,6 @@
 #include "open_manipulator_msgs/OpenManipulatorState.h"
 #include "open_manipulator_msgs/SetJointPosition.h"
 #include "open_manipulator_msgs/SetKinematicsPose.h"
-#include "open_manipulator_msgs/SetActuatorState.h"
 
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit/robot_state/robot_state.h>
@@ -88,32 +87,27 @@ public:
 	** Logging
 	**********************/
 	enum LogLevel {
-	         Debug,
-	         Info,
-	         Warn,
-	         Error,
-	         Fatal
-	 };
+    Debug,
+    Info,
+    Warn,
+    Error,
+    Fatal
+	};
 
 	QStringListModel* loggingModel() { return &logging_model; }
 	void log( const LogLevel &level, const std::string &msg);
 
-  void manipulatorStatesCallback(const open_manipulator_msgs::OpenManipulatorState::ConstPtr &msg);
   void jointStatesCallback(const sensor_msgs::JointState::ConstPtr &msg);
 
   std::vector<double> getPresentJointAngle();
   std::vector<double> getPresentKinematicsPosition();
   Eigen::Quaterniond getPresentKinematicsOrientation();
   Eigen::Vector3d getPresentKinematicsOrientationRPY();
-  bool getOpenManipulatorMovingState();
-  bool getOpenManipulatorActuatorState();
   bool getWithGripperState();
 
-  void setOption(std::string opt);
   bool setJointSpacePath(std::vector<double> joint_angle, double path_time);
   bool setTaskSpacePath(std::vector<double> kinematics_pose, double path_time);
   bool setToolControl(std::vector<double> joint_angle);
-  bool setActuatorState(bool actuator_state);
 
 Q_SIGNALS:
   void rosShutdown();
@@ -127,24 +121,16 @@ private:
   ros::Publisher open_manipulator_option_pub_;
 
   // ROS Subscribers
-  ros::Subscriber open_manipulator_states_sub_;
   ros::Subscriber open_manipulator_joint_states_sub_;
 
   // ROS Service Clients
-  ros::ServiceClient goal_joint_space_path_client_;
-  ros::ServiceClient goal_task_space_path_position_only_client_;
-  ros::ServiceClient goal_task_space_path_client_;
   ros::ServiceClient goal_tool_control_client_;
-  ros::ServiceClient set_actuator_state_client_;
 
   std::vector<double> present_joint_angle_;
   std::vector<double> present_kinematics_position_;
   Eigen::Quaterniond present_kinematics_orientation_;
   Eigen::Vector3d present_kinematics_orientation_rpy_;
   open_manipulator_msgs::KinematicsPose kinematics_pose_;
-
-  bool open_manipulator_is_moving_;
-  bool open_manipulator_actuator_enabled_;
 
   // MoveIt! interface
   moveit::planning_interface::MoveGroupInterface* move_group_;

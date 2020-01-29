@@ -39,9 +39,7 @@ namespace ur_rh_gui {
 
 QNode::QNode(int argc, char** argv) 
     :init_argc(argc),
-     init_argv(argv),
-     open_manipulator_actuator_enabled_(false),
-     open_manipulator_is_moving_(false)
+     init_argv(argv)
 {}
 
 QNode::~QNode()
@@ -92,15 +90,10 @@ bool QNode::init()
   open_manipulator_option_pub_ = n.advertise<std_msgs::String>("option", 10);
 
   // msg subscriber
-  open_manipulator_states_sub_       = n.subscribe("states", 10, &QNode::manipulatorStatesCallback, this);
   open_manipulator_joint_states_sub_ = n.subscribe("joint_states", 10, &QNode::jointStatesCallback, this);
 
-  // service client
-  goal_joint_space_path_client_ = n.serviceClient<open_manipulator_msgs::SetJointPosition>("goal_joint_space_path");
-  goal_task_space_path_position_only_client_ = n.serviceClient<open_manipulator_msgs::SetKinematicsPose>("goal_task_space_path_position_only");
-  goal_task_space_path_client_= n.serviceClient<open_manipulator_msgs::SetKinematicsPose>("goal_task_space_path");
+  // srv client
   goal_tool_control_client_ = n.serviceClient<open_manipulator_msgs::SetJointPosition>("goal_tool_control");
-  set_actuator_state_client_ = n.serviceClient<open_manipulator_msgs::SetActuatorState>("set_actuator_state");
 
   start();
 	return true;
@@ -116,19 +109,6 @@ void QNode::run()
 	}
 	std::cout << "Ros shutdown, proceeding to close the gui." << std::endl;
 	Q_EMIT rosShutdown();
-}
-
-void QNode::manipulatorStatesCallback(const open_manipulator_msgs::OpenManipulatorState::ConstPtr &msg)
-{
-  if(msg->open_manipulator_moving_state == msg->IS_MOVING)
-    open_manipulator_is_moving_ = true;
-  else
-    open_manipulator_is_moving_ = false;
-
-  if(msg->open_manipulator_actuator_state == msg->ACTUATOR_ENABLED)
-    open_manipulator_actuator_enabled_ = true;
-  else
-    open_manipulator_actuator_enabled_ = false;
 }
 
 void QNode::jointStatesCallback(const sensor_msgs::JointState::ConstPtr &msg)
@@ -193,23 +173,6 @@ Eigen::Vector3d QNode::getPresentKinematicsOrientationRPY()
   present_kinematics_orientation_rpy_ = robotis_manipulator::math::convertQuaternionToRPYVector(present_kinematics_orientation_);
 
   return present_kinematics_orientation_rpy_;
-}
-
-bool QNode::getOpenManipulatorMovingState()
-{
-  return open_manipulator_is_moving_;
-}
-
-bool QNode::getOpenManipulatorActuatorState()
-{
-  return open_manipulator_actuator_enabled_;
-}
-
-void QNode::setOption(std::string opt)
-{
-  std_msgs::String msg;
-  msg.data = opt;
-  open_manipulator_option_pub_.publish(msg);
 }
 
 bool QNode::setJointSpacePath(std::vector<double> joint_angle, double path_time)
@@ -283,18 +246,6 @@ bool QNode::setToolControl(std::vector<double> joint_angle)
   srv.request.joint_position.position = joint_angle;
 
   if(goal_tool_control_client_.call(srv))
-  {
-    return srv.response.is_planned;
-  }
-  return false;
-}
-
-bool QNode::setActuatorState(bool actuator_state)
-{
-  open_manipulator_msgs::SetActuatorState srv;
-  srv.request.set_actuator_state = actuator_state;
-
-  if(set_actuator_state_client_.call(srv))
   {
     return srv.response.is_planned;
   }
