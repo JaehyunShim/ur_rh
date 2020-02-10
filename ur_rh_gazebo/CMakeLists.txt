@@ -36,7 +36,7 @@ catkin_package()
 #################################################################################
 # Install
 #################################################################################
-install(DIRECTORY launch controller 
+install(DIRECTORY controller launch 
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 

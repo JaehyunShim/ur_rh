@@ -9,9 +9,11 @@
   <maintainer email="jhshim@robotis.com">Ryan Shim</maintainer>
 
   <buildtool_depend>catkin</buildtool_depend>
-  <!-- <exec_depend>ur_rh_controller</exec_depend> -->
-  <!-- <exec_depend>ur_rh_gazebo</exec_depend> -->
-  <!-- <exec_depend>ur_rh_gui</exec_depend> -->
+  <exec_depend>ur_rh_bringup</exec_depend>
+  <exec_depend>ur_rh_description</exec_depend>
+  <exec_depend>ur_rh_gazebo</exec_depend>
+  <exec_depend>ur_rh_gui</exec_depend>
+  <exec_depend>ur_rh_moveit_config</exec_depend>
 
   <export><metapackage/></export>
 </package>

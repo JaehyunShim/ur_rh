@@ -1355,7 +1355,7 @@
      <string>Gripper</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="txt_grip">
+   <widget class="QLineEdit" name="txt_gripper">
     <property name="enabled">
      <bool>true</bool>
     </property>

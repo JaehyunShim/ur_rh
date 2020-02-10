@@ -54,20 +54,13 @@ MainWindow::~MainWindow() {}
 void MainWindow::timerCallback()
 {
   std::vector<double> joint_angle = qnode.getPresentJointAngle();
-
-  int joint_size = 6;
-  if (0) joint_size = 7;
-
-  if(joint_angle.size() != joint_size)
-    return;
-
   ui.txt_j1->setText(QString::number(joint_angle.at(0),'f', 3));
   ui.txt_j2->setText(QString::number(joint_angle.at(1),'f', 3));
   ui.txt_j3->setText(QString::number(joint_angle.at(2),'f', 3));
   ui.txt_j4->setText(QString::number(joint_angle.at(3),'f', 3));
   ui.txt_j5->setText(QString::number(joint_angle.at(4),'f', 3));
   ui.txt_j6->setText(QString::number(joint_angle.at(5),'f', 3));
-  if (0) ui.txt_grip->setText(QString::number(joint_angle.at(6),'f', 3));
+  ui.txt_gripper->setText(QString::number(joint_angle.at(6),'f', 3));
 
   std::vector<double> position = qnode.getPresentKinematicsPosition();
   Eigen::Vector3d orientation_rpy = qnode.getPresentKinematicsOrientationRPY();
@@ -133,7 +126,6 @@ void MainWindow::on_btn_init_pose_clicked(void)
     writeLog("[ERR!!] Failed to send service");
     return;
   }
-
   writeLog("Send joint angle to initial pose");
 }
 
@@ -168,7 +160,6 @@ void MainWindow::on_btn_gripper_open_clicked(void)
     writeLog("[ERR!!] Failed to send service");
     return;
   }
-
   writeLog("Send gripper open");
 }
 
@@ -181,7 +172,6 @@ void MainWindow::on_btn_gripper_close_clicked(void)
     writeLog("[ERR!!] Failed to send service");
     return;
   }
-
   writeLog("Send gripper close");
 }
 
@@ -194,7 +184,7 @@ void MainWindow::on_btn_read_joint_angle_clicked(void)
   ui.doubleSpinBox_j4->setValue(joint_angle.at(3));
   ui.doubleSpinBox_j5->setValue(joint_angle.at(4));
   ui.doubleSpinBox_j6->setValue(joint_angle.at(5));
-  // ui.doubleSpinBox_gripper->setValue(joint_angle.at(4));
+  ui.doubleSpinBox_gripper->setValue(joint_angle.at(6));
 
   writeLog("Read joint angle");
 }
@@ -216,7 +206,6 @@ void MainWindow::on_btn_send_joint_angle_clicked(void)
     writeLog("[ERR!!] Failed to send service");
     return;
   }
-
   writeLog("Send joint angle");
 }
 
@@ -256,7 +245,6 @@ void MainWindow::on_btn_send_kinematic_pose_clicked(void)
     writeLog("[ERR!!] Failed to send service");
     return;
   }
-
   writeLog("Send task pose");
 }
 

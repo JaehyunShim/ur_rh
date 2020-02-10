@@ -36,13 +36,7 @@ catkin_package()
 #################################################################################
 # Install
 #################################################################################
-install(DIRECTORY launch 
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-)
-install(DIRECTORY urdf 
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-)
-install(DIRECTORY meshes 
+install(DIRECTORY launch meshes rviz urdf
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
 

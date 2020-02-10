@@ -16,7 +16,6 @@ $ git clone https://github.com/ros-industrial/universal_robot.git
 $ git clone https://github.com/ROBOTIS-GIT/RH-P12-RN-A.git
 
 (Install binary packages)
-$ sudo apt-get install ros-melodic-??
 
 (Build)
 $ cd ~/catkin_ws && catkin_make
@@ -30,21 +29,18 @@ $ cd ~/catkin_ws && catkin_make
 # Bringup
 $ roslaunch ur_rh_bringup ur_rh_bringup.launch
 # MoveIt
-$ roslaunch ur5_e_moveit_config ur5_e_moveit_planning_execution.launch
-$ roslaunch ur5_e_moveit_config moveit_rviz.launch config:=true
+$ roslaunch ur_rh_moveit_config move_group.launch
+$ roslaunch ur_rh_moveit_config moveit_rviz.launch
 
 (Gazebo Simulation)
 # Gazebo
-$ roslaunch ur_rh_gazebo ur_rh_gazebo.launch
+$ roslaunch ur_rh_gazebo ur_rh.launch
 # MoveIt
-$ roslaunch ur5_e_moveit_config ur5_e_moveit_planning_execution.launch sim:=true
-$ roslaunch ur5_e_moveit_config moveit_rviz.launch config:=true
+$ roslaunch ur_rh_moveit_config move_group.launch
+$ roslaunch ur_rh_moveit_config moveit_rviz.launch
+
 # Control gripper
 $ rostopic pub -1 /rh_p12_rn_a/rh_p12_rn_a_position/command std_msgs/Float64 "data: 1.1"
-
-(Gazebo Simulation)
-# Gazebo
-$ roslaunch ur_rh_gazebo ur_rh_gazebo.launch
 # GUI
 $ roslaunch ur_rh_gui ur_rh_gui.launch
 ```

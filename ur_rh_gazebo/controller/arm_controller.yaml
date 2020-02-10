@@ -1,3 +1,4 @@
+# Link: http://wiki.ros.org/joint_trajectory_controller
 arm_controller:
   type: position_controllers/JointTrajectoryController
   joints:
@@ -19,6 +20,7 @@ arm_controller:
   stop_trajectory_duration: 0.5
   state_publish_rate:  25
   action_monitor_rate: 10
+
 joint_group_position_controller:
   type: position_controllers/JointGroupPositionController
   joints:
@@ -28,4 +30,3 @@ joint_group_position_controller:
      - wrist_1_joint
      - wrist_2_joint
      - wrist_3_joint
-

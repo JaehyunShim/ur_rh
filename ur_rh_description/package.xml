@@ -2,9 +2,7 @@
 <package format="2">
   <name>ur_rh_description</name>
   <version>1.0.1</version>
-  <description>
-    ROS package for ur_rh_description.
-  </description>
+  <description>ROS package for ur_rh_description</description>
 
   <author email="jhshim@robotis.com">Ryan Shim</author>
   <license>BSD</license>

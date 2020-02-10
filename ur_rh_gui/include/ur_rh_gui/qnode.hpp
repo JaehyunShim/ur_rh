@@ -35,17 +35,16 @@
 #include <string>
 #include <QThread>
 #include <QStringListModel>
-
-#include <sensor_msgs/JointState.h>
-#include <std_msgs/String.h>
-
 #include <eigen3/Eigen/Eigen>
 
-#include "robotis_manipulator/robotis_manipulator.h"
+#include <geometry_msgs/Pose.h>
+#include <sensor_msgs/JointState.h>
+#include <std_msgs/String.h>
 
 #include "open_manipulator_msgs/OpenManipulatorState.h"
 #include "open_manipulator_msgs/SetJointPosition.h"
 #include "open_manipulator_msgs/SetKinematicsPose.h"
+#include "robotis_manipulator/robotis_manipulator.h"
 
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit/robot_state/robot_state.h>
@@ -58,9 +57,6 @@
 #include <moveit_msgs/DisplayTrajectory.h>
 #include <moveit_msgs/ExecuteTrajectoryActionGoal.h>
 #include <moveit_msgs/MoveGroupActionGoal.h>
-
-
-#include <geometry_msgs/PoseStamped.h>
 
 
 #define NUM_OF_JOINT_AND_TOOL 7
@@ -103,7 +99,6 @@ public:
   std::vector<double> getPresentKinematicsPosition();
   Eigen::Quaterniond getPresentKinematicsOrientation();
   Eigen::Vector3d getPresentKinematicsOrientationRPY();
-  bool getWithGripperState();
 
   bool setJointSpacePath(std::vector<double> joint_angle, double path_time);
   bool setTaskSpacePath(std::vector<double> kinematics_pose, double path_time);
@@ -117,14 +112,8 @@ private:
 	char** init_argv;
   QStringListModel logging_model;
 
-  // ROS Publishers
-  ros::Publisher open_manipulator_option_pub_;
-
   // ROS Subscribers
   ros::Subscriber open_manipulator_joint_states_sub_;
-
-  // ROS Service Clients
-  ros::ServiceClient goal_tool_control_client_;
 
   std::vector<double> present_joint_angle_;
   std::vector<double> present_kinematics_position_;
@@ -134,6 +123,7 @@ private:
 
   // MoveIt! interface
   moveit::planning_interface::MoveGroupInterface* move_group_;
+  moveit::planning_interface::MoveGroupInterface* move_group2_;
 };
 
 }  // namespace ur_rh_gui

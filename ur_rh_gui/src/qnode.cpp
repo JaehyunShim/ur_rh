@@ -38,8 +38,8 @@ namespace ur_rh_gui {
 *****************************************************************************/
 
 QNode::QNode(int argc, char** argv) 
-    :init_argc(argc),
-     init_argv(argv)
+: init_argc(argc),
+  init_argv(argv)
 {}
 
 QNode::~QNode()
@@ -61,39 +61,21 @@ bool QNode::init()
 	}
 	ros::start(); // explicitly needed since our nodehandle is going out of scope.
   ros::NodeHandle n("");
-  ros::NodeHandle priv_n("~");
 
   // Moveit 
   ros::AsyncSpinner spinner(1); 
   spinner.start();
 
-  std::string planning_group_name = "manipulator";
+  // Move group arm
+  std::string planning_group_name = "arm";
   move_group_ = new moveit::planning_interface::MoveGroupInterface(planning_group_name);
 
-  // The :move_group_interface:`MoveGroup` class can be easily
-  // setup using just the name of the planning group you would like to control and plan for.
-  moveit::planning_interface::MoveGroupInterface move_group(planning_group_name);
+  // Move group gripper
+  std::string planning_group_name2 = "gripper";
+  move_group2_ = new moveit::planning_interface::MoveGroupInterface(planning_group_name2);
 
-  // We will use the :planning_scene_interface:`PlanningSceneInterface`
-  // class to add and remove collision objects in our "virtual world" scene
-  // moveit::planning_interface::PlanningSceneInterface planning_scene_interface;
-
-  // Raw pointers are frequently used to refer to the planning group for improved performance.
-  const robot_state::JointModelGroup* joint_model_group =
-      move_group.getCurrentState()->getJointModelGroup(planning_group_name);
-
-  robot_state::RobotState start_state(*move_group.getCurrentState());
-
-  // geometry_msgs::Pose current_pose = (move_group_->getCurrentPose()).pose;
-
-  // msg publisher
-  open_manipulator_option_pub_ = n.advertise<std_msgs::String>("option", 10);
-
-  // msg subscriber
+  // ROS subscriber
   open_manipulator_joint_states_sub_ = n.subscribe("joint_states", 10, &QNode::jointStatesCallback, this);
-
-  // srv client
-  goal_tool_control_client_ = n.serviceClient<open_manipulator_msgs::SetJointPosition>("goal_tool_control");
 
   start();
 	return true;
@@ -114,8 +96,7 @@ void QNode::run()
 void QNode::jointStatesCallback(const sensor_msgs::JointState::ConstPtr &msg)
 {
   std::vector<double> temp_angle;
-  temp_angle.resize(NUM_OF_JOINT_AND_TOOL - 1);
-  if (0) temp_angle.resize(NUM_OF_JOINT_AND_TOOL);
+  temp_angle.resize(NUM_OF_JOINT_AND_TOOL);
 
   for(int i = 0; i < msg->name.size(); i ++)
   {
@@ -125,14 +106,9 @@ void QNode::jointStatesCallback(const sensor_msgs::JointState::ConstPtr &msg)
     else if(!msg->name.at(i).compare("wrist_1_joint"))       temp_angle.at(3) = (msg->position.at(i));
     else if(!msg->name.at(i).compare("wrist_2_joint"))       temp_angle.at(4) = (msg->position.at(i));
     else if(!msg->name.at(i).compare("wrist_3_joint"))       temp_angle.at(5) = (msg->position.at(i));
-    
-    if (0)
-    {
-      if(!msg->name.at(i).compare("gripper")) temp_angle.at(6) = (msg->position.at(i));      
-    }
+    else if(!msg->name.at(i).compare("rh_p12_rn_a"))         temp_angle.at(6) = (msg->position.at(i));      
   }
   present_joint_angle_ = temp_angle;
-
 
   ros::AsyncSpinner spinner(1); 
   spinner.start();
@@ -182,7 +158,7 @@ bool QNode::setJointSpacePath(std::vector<double> joint_angle, double path_time)
 
   // Next get the current set of joint values for the group.
   const robot_state::JointModelGroup* joint_model_group =
-      move_group_->getCurrentState()->getJointModelGroup("manipulator");
+    move_group_->getCurrentState()->getJointModelGroup("manipulator");
       
   moveit::core::RobotStatePtr current_state = move_group_->getCurrentState();
 
@@ -214,19 +190,19 @@ bool QNode::setTaskSpacePath(std::vector<double> kinematics_pose, double path_ti
   ros::AsyncSpinner spinner(1); 
   spinner.start();
 
-  // move_group_->setMaxVelocityScalingFactor(0.1);
-  // move_group_->setMaxAccelerationScalingFactor(0.1);
   move_group_->setGoalTolerance(0.1);
+  move_group_->setMaxVelocityScalingFactor(0.1);
+  move_group_->setMaxAccelerationScalingFactor(0.1);
 
-  geometry_msgs::Pose target_pose1;
-  target_pose1.position.x = kinematics_pose.at(0);
-  target_pose1.position.y = kinematics_pose.at(1);
-  target_pose1.position.z = kinematics_pose.at(2);
-  target_pose1.orientation.w = kinematics_pose.at(3);
-  target_pose1.orientation.x = kinematics_pose.at(4);
-  target_pose1.orientation.y = kinematics_pose.at(5);
-  target_pose1.orientation.z = kinematics_pose.at(6);
-  move_group_->setPoseTarget(target_pose1);
+  geometry_msgs::Pose target_pose;
+  target_pose.position.x = kinematics_pose.at(0);
+  target_pose.position.y = kinematics_pose.at(1);
+  target_pose.position.z = kinematics_pose.at(2);
+  target_pose.orientation.w = kinematics_pose.at(3);
+  target_pose.orientation.x = kinematics_pose.at(4);
+  target_pose.orientation.y = kinematics_pose.at(5);
+  target_pose.orientation.z = kinematics_pose.at(6);
+  move_group_->setPoseTarget(target_pose);
 
   moveit::planning_interface::MoveGroupInterface::Plan my_plan;
   bool success = (move_group_->plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
@@ -241,14 +217,30 @@ bool QNode::setTaskSpacePath(std::vector<double> kinematics_pose, double path_ti
 
 bool QNode::setToolControl(std::vector<double> joint_angle)
 {
-  open_manipulator_msgs::SetJointPosition srv;
-  srv.request.joint_position.joint_name.push_back("gripper");
-  srv.request.joint_position.position = joint_angle;
+  ros::AsyncSpinner spinner(1); 
+  spinner.start();
 
-  if(goal_tool_control_client_.call(srv))
-  {
-    return srv.response.is_planned;
-  }
-  return false;
+  // Next get the current set of joint values for the group.
+  const robot_state::JointModelGroup* joint_model_group =
+    move_group2_->getCurrentState()->getJointModelGroup("gripper");
+      
+  moveit::core::RobotStatePtr current_state = move_group2_->getCurrentState();
+
+  std::vector<double> joint_group_positions;
+  current_state->copyJointGroupPositions(joint_model_group, joint_group_positions);
+
+  // Now, let's modify one of the joints, plan to the new joint space goal and visualize the plan.
+  joint_group_positions[0] = joint_angle.at(0);  // radians
+  move_group2_->setJointValueTarget(joint_group_positions);
+
+  moveit::planning_interface::MoveGroupInterface::Plan my_plan;
+  bool success = (move_group2_->plan(my_plan) == moveit::planning_interface::MoveItErrorCode::SUCCESS);
+  if (success == false)
+    return false;
+
+  move_group2_->move();
+
+  spinner.stop();
+  return true;  
 }
 }  // namespace ur_rh_gui
