@@ -1,4 +1,4 @@
-## UR5e + RH-P12-RN
+## UR5e + RH-P12-RN-A
 
 ### Install ROS Melodic
 ```sh
@@ -12,6 +12,7 @@ $ wget https://raw.githubusercontent.com/rjshim/robotis_engineer/master/install_
 $ cd ~/catkin_ws/src/
 
 (Download packages)
+$ git clone https://github.com/rjshim/ur_rh.git
 $ git clone https://github.com/ros-industrial/universal_robot.git
 $ git clone https://github.com/ROBOTIS-GIT/RH-P12-RN-A.git
 

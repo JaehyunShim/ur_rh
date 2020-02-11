@@ -11,15 +11,12 @@ add_compile_options(-std=c++11)
 # Find catkin packages and libraries for catkin and system dependencies
 ################################################################################
 find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  std_msgs
-  sensor_msgs
-  robotis_manipulator
-  open_manipulator_msgs
   cmake_modules
-
-
   geometry_msgs
+  roscpp
+  sensor_msgs
+  std_msgs
+  tf
   moveit_msgs
   moveit_core
   moveit_ros_planning
@@ -68,14 +65,16 @@ endif()
 ################################################################################
 catkin_package(
   INCLUDE_DIRS include
-  CATKIN_DEPENDS roscpp std_msgs sensor_msgs robotis_manipulator 
-    open_manipulator_msgs
+  CATKIN_DEPENDS
+    geometry_msgs
+    roscpp
+    sensor_msgs
+    std_msgs
+    tf
     moveit_msgs
     moveit_core
     moveit_ros_planning
     moveit_ros_planning_interface
-    geometry_msgs
-
   DEPENDS EIGEN3
 )
 

@@ -74,9 +74,6 @@ bool QNode::init()
   std::string planning_group_name2 = "gripper";
   move_group2_ = new moveit::planning_interface::MoveGroupInterface(planning_group_name2);
 
-  // ROS subscriber
-  open_manipulator_joint_states_sub_ = n.subscribe("joint_states", 10, &QNode::jointStatesCallback, this);
-
   start();
 	return true;
 }
@@ -86,6 +83,7 @@ void QNode::run()
   ros::Rate loop_rate(10);
 	while ( ros::ok() )
   {
+    updateRobotState();
 		ros::spinOnce();
 		loop_rate.sleep();
 	}
@@ -93,25 +91,22 @@ void QNode::run()
 	Q_EMIT rosShutdown();
 }
 
-void QNode::jointStatesCallback(const sensor_msgs::JointState::ConstPtr &msg)
+void QNode::updateRobotState()
 {
-  std::vector<double> temp_angle;
-  temp_angle.resize(NUM_OF_JOINT_AND_TOOL);
-
-  for(int i = 0; i < msg->name.size(); i ++)
-  {
-    if     (!msg->name.at(i).compare("shoulder_pan_joint"))  temp_angle.at(0) = (msg->position.at(i));
-    else if(!msg->name.at(i).compare("shoulder_lift_joint")) temp_angle.at(1) = (msg->position.at(i));
-    else if(!msg->name.at(i).compare("elbow_joint"))         temp_angle.at(2) = (msg->position.at(i));
-    else if(!msg->name.at(i).compare("wrist_1_joint"))       temp_angle.at(3) = (msg->position.at(i));
-    else if(!msg->name.at(i).compare("wrist_2_joint"))       temp_angle.at(4) = (msg->position.at(i));
-    else if(!msg->name.at(i).compare("wrist_3_joint"))       temp_angle.at(5) = (msg->position.at(i));
-    else if(!msg->name.at(i).compare("rh_p12_rn_a"))         temp_angle.at(6) = (msg->position.at(i));      
-  }
-  present_joint_angle_ = temp_angle;
-
   ros::AsyncSpinner spinner(1); 
   spinner.start();
+
+  std::vector<double> jointValues = move_group_->getCurrentJointValues();
+  std::vector<double> jointValues2 = move_group2_->getCurrentJointValues();
+  std::vector<double> temp_angle;
+  temp_angle.push_back(jointValues.at(0));
+  temp_angle.push_back(jointValues.at(1));
+  temp_angle.push_back(jointValues.at(2));
+  temp_angle.push_back(jointValues.at(3));
+  temp_angle.push_back(jointValues.at(4));
+  temp_angle.push_back(jointValues.at(5));
+  temp_angle.push_back(jointValues2.at(0));
+  present_joint_angle_ = temp_angle;
 
   geometry_msgs::Pose current_pose = move_group_->getCurrentPose().pose;  
   std::vector<double> temp_position;
@@ -146,7 +141,17 @@ Eigen::Quaterniond QNode::getPresentKinematicsOrientation()
 
 Eigen::Vector3d QNode::getPresentKinematicsOrientationRPY()
 {
-  present_kinematics_orientation_rpy_ = robotis_manipulator::math::convertQuaternionToRPYVector(present_kinematics_orientation_);
+  tf::Quaternion q(
+    present_kinematics_orientation_.x(),
+    present_kinematics_orientation_.y(),
+    present_kinematics_orientation_.z(),
+    present_kinematics_orientation_.w());
+  tf::Matrix3x3 m(q);
+  double roll, pitch, yaw;
+  m.getRPY(
+    present_kinematics_orientation_rpy_.coeffRef(0,0),
+    present_kinematics_orientation_rpy_.coeffRef(1,0),
+    present_kinematics_orientation_rpy_.coeffRef(2,0));
 
   return present_kinematics_orientation_rpy_;
 }
@@ -158,7 +163,7 @@ bool QNode::setJointSpacePath(std::vector<double> joint_angle, double path_time)
 
   // Next get the current set of joint values for the group.
   const robot_state::JointModelGroup* joint_model_group =
-    move_group_->getCurrentState()->getJointModelGroup("manipulator");
+    move_group_->getCurrentState()->getJointModelGroup("arm");
       
   moveit::core::RobotStatePtr current_state = move_group_->getCurrentState();
 
@@ -189,10 +194,6 @@ bool QNode::setTaskSpacePath(std::vector<double> kinematics_pose, double path_ti
 {
   ros::AsyncSpinner spinner(1); 
   spinner.start();
-
-  move_group_->setGoalTolerance(0.1);
-  move_group_->setMaxVelocityScalingFactor(0.1);
-  move_group_->setMaxAccelerationScalingFactor(0.1);
 
   geometry_msgs::Pose target_pose;
   target_pose.position.x = kinematics_pose.at(0);

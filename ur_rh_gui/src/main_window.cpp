@@ -227,18 +227,21 @@ void MainWindow::on_btn_read_kinematic_pose_clicked(void)
 void MainWindow::on_btn_send_kinematic_pose_clicked(void)
 {
   std::vector<double> kinematics_pose;
-  Eigen::Quaterniond temp_orientation;
-  temp_orientation = robotis_manipulator::math::convertRPYToQuaternion(ui.doubleSpinBox_roll->value(), ui.doubleSpinBox_pitch->value(), ui.doubleSpinBox_yaw->value());
+  geometry_msgs::Quaternion temp_orientation;
+  temp_orientation = tf::createQuaternionMsgFromRollPitchYaw(
+    ui.doubleSpinBox_roll->value(),
+    ui.doubleSpinBox_pitch->value(),
+    ui.doubleSpinBox_yaw->value());
 
   double path_time = ui.doubleSpinBox_time_cs->value();
 
   kinematics_pose.push_back(ui.doubleSpinBox_x->value());
   kinematics_pose.push_back(ui.doubleSpinBox_y->value());
   kinematics_pose.push_back(ui.doubleSpinBox_z->value());
-  kinematics_pose.push_back(temp_orientation.w());
-  kinematics_pose.push_back(temp_orientation.x());
-  kinematics_pose.push_back(temp_orientation.y());
-  kinematics_pose.push_back(temp_orientation.z());
+  kinematics_pose.push_back(temp_orientation.w);
+  kinematics_pose.push_back(temp_orientation.x);
+  kinematics_pose.push_back(temp_orientation.y);
+  kinematics_pose.push_back(temp_orientation.z);
 
   if(!qnode.setTaskSpacePath(kinematics_pose, path_time))
   {

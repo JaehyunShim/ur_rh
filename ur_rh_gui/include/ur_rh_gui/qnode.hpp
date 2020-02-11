@@ -40,11 +40,7 @@
 #include <geometry_msgs/Pose.h>
 #include <sensor_msgs/JointState.h>
 #include <std_msgs/String.h>
-
-#include "open_manipulator_msgs/OpenManipulatorState.h"
-#include "open_manipulator_msgs/SetJointPosition.h"
-#include "open_manipulator_msgs/SetKinematicsPose.h"
-#include "robotis_manipulator/robotis_manipulator.h"
+#include <tf/tf.h>
 
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit/robot_state/robot_state.h>
@@ -58,8 +54,8 @@
 #include <moveit_msgs/ExecuteTrajectoryActionGoal.h>
 #include <moveit_msgs/MoveGroupActionGoal.h>
 
+#define PI 3.141592
 
-#define NUM_OF_JOINT_AND_TOOL 7
 
 /*****************************************************************************
 ** Namespaces
@@ -93,7 +89,7 @@ public:
 	QStringListModel* loggingModel() { return &logging_model; }
 	void log( const LogLevel &level, const std::string &msg);
 
-  void jointStatesCallback(const sensor_msgs::JointState::ConstPtr &msg);
+  void updateRobotState();
 
   std::vector<double> getPresentJointAngle();
   std::vector<double> getPresentKinematicsPosition();
@@ -112,14 +108,10 @@ private:
 	char** init_argv;
   QStringListModel logging_model;
 
-  // ROS Subscribers
-  ros::Subscriber open_manipulator_joint_states_sub_;
-
   std::vector<double> present_joint_angle_;
   std::vector<double> present_kinematics_position_;
   Eigen::Quaterniond present_kinematics_orientation_;
   Eigen::Vector3d present_kinematics_orientation_rpy_;
-  open_manipulator_msgs::KinematicsPose kinematics_pose_;
 
   // MoveIt! interface
   moveit::planning_interface::MoveGroupInterface* move_group_;
