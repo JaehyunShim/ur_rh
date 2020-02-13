@@ -40,8 +40,6 @@ $ roslaunch ur_rh_gazebo ur_rh.launch
 $ roslaunch ur_rh_moveit_config move_group.launch
 $ roslaunch ur_rh_moveit_config moveit_rviz.launch
 
-# Control gripper
-$ rostopic pub -1 /rh_p12_rn_a/rh_p12_rn_a_position/command std_msgs/Float64 "data: 1.1"
 # GUI
 $ roslaunch ur_rh_gui ur_rh_gui.launch
 ```

@@ -9,7 +9,4 @@ controller_list:
       - wrist_3_joint
   - name: fake_gripper_controller
     joints:
-      - rh_l1
-      - rh_l2
       - rh_p12_rn_a
-      - rh_r2

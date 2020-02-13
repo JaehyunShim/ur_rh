@@ -70,6 +70,7 @@
     <origin xyz="0.0 0.0493634 0.0285" rpy="0 0 0"/>
     <axis xyz="-1 0 0"/>
     <limit velocity="6.5" effort="1000" lower="0.0" upper="1.0" />
+    <mimic joint="rh_p12_rn_a" multiplier="1"/>
     <dynamics damping="0.7"/>
   </joint>
 
@@ -105,6 +106,7 @@
     <origin xyz="0.0 -0.008 0.048" rpy="0 0 0"/>
     <axis xyz="-1 0 0"/>
     <limit velocity="6.5" effort="1000" lower="0.0" upper="1.1" />
+    <mimic joint="rh_p12_rn_a" multiplier="1"/>
     <dynamics damping="0.7"/>
   </joint>
 
@@ -140,6 +142,7 @@
     <origin xyz="0.0 -0.0493634 0.0285" rpy="0 0 0"/>
     <axis xyz="1 0 0"/>
     <limit velocity="6.5" effort="1000" lower="0.0" upper="1.0" />
+    <mimic joint="rh_p12_rn_a" multiplier="1"/>
     <dynamics damping="0.7"/>
   </joint>
 
