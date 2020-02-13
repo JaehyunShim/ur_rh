@@ -7,5 +7,5 @@ moveit_setup_assistant_config:
     relative_path: config/ur_rh.srdf
   CONFIG:
     author_name: Ryan Shim
-    author_email: rjshim@robotis.com
-    generated_timestamp: 1581335676
+    author_email: jhshim@robotis.com
+    generated_timestamp: 1581498029

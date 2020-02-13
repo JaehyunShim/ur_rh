@@ -1,7 +1,7 @@
 <package format="2">
   <name>ur_rh</name>
   <version>1.0.1</version>
-  <description>ROS packages for Universal Robot with RH-P12-RN gripper</description>
+  <description>ROS packages for Universal Robot with RH-P12-RN-A Gripper</description>
 
   <author email="jhshim@robotis.com">Ryan Shim</author>
   <license>BSD</license>

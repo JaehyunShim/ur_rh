@@ -5,8 +5,8 @@
   <description>
      An automatically generated package with all the configuration and launch files for using the ur_rh with the MoveIt! Motion Planning Framework
   </description>
-  <author email="rjshim@robotis.com">Ryan Shim</author>
-  <maintainer email="rjshim@robotis.com">Ryan Shim</maintainer>
+  <author email="jhshim@robotis.com">Ryan Shim</author>
+  <maintainer email="jhshim@robotis.com">Ryan Shim</maintainer>
 
   <license>BSD</license>
 

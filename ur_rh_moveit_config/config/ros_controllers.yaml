@@ -15,7 +15,10 @@ hardware_interface:
     - wrist_1_joint
     - wrist_2_joint
     - wrist_3_joint
+    - rh_l1
+    - rh_l2
     - rh_p12_rn_a
+    - rh_r2
   sim_control_mode: 1  # 0: position, 1: velocity
 # Publish all joint states
 # Creates the /joint_states topic necessary in ROS
@@ -34,31 +37,9 @@ controller_list:
       - wrist_1_joint
       - wrist_2_joint
       - wrist_3_joint
-gripper_controller:
-  type: position_controllers/JointPositionController
-  joints:
-    - rh_l1
-    - rh_l2
-    - rh_p12_rn_a
-    - rh_r2
-  gains:
-    rh_l1:
-      p: 100
-      d: 1
-      i: 1
-      i_clamp: 1
-    rh_l2:
-      p: 100
-      d: 1
-      i: 1
-      i_clamp: 1
-    rh_p12_rn_a:
-      p: 100
-      d: 1
-      i: 1
-      i_clamp: 1
-    rh_r2:
-      p: 100
-      d: 1
-      i: 1
-      i_clamp: 1
+  - name: gripper_controller
+    action_ns: follow_joint_trajectory
+    default: True
+    type: FollowJointTrajectory
+    joints:
+      - rh_p12_rn_a
