@@ -15,8 +15,8 @@ $ cd ~/catkin_ws/src/
 $ git clone https://github.com/rjshim/ur_rh.git
 $ git clone https://github.com/ros-industrial/universal_robot.git
 $ git clone https://github.com/ROBOTIS-GIT/RH-P12-RN-A.git
-
-(Install binary packages)
+$ git clone https://github.com/ROBOTIS-GIT/ROBOTIS-Framework.git
+$ git clone https://github.com/ROBOTIS-GIT/ROBOTIS-Framework-msgs.git
 
 (Build)
 $ cd ~/catkin_ws && catkin_make

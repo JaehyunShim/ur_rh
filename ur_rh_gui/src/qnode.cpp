@@ -231,7 +231,7 @@ bool QNode::setToolControl(std::vector<double> joint_angle)
   current_state->copyJointGroupPositions(joint_model_group, joint_group_positions);
 
   // Now, let's modify one of the joints, plan to the new joint space goal and visualize the plan.
-  joint_group_positions[0] = joint_angle.at(0);  // radians
+  joint_group_positions[2] = joint_angle.at(0);  // [2] for rh_p12_rn_a joint
   move_group2_->setJointValueTarget(joint_group_positions);
 
   moveit::planning_interface::MoveGroupInterface::Plan my_plan;
