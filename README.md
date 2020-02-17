@@ -15,6 +15,7 @@ $ cd ~/catkin_ws/src/
 $ git clone https://github.com/rjshim/ur_rh.git
 $ git clone https://github.com/ros-industrial/universal_robot.git
 $ git clone https://github.com/ROBOTIS-GIT/RH-P12-RN-A.git
+$ git clone https://github.com/ROBOTIS-GIT/DynamixelSDK.git
 $ git clone https://github.com/ROBOTIS-GIT/ROBOTIS-Framework.git
 $ git clone https://github.com/ROBOTIS-GIT/ROBOTIS-Framework-msgs.git
 
@@ -27,11 +28,12 @@ $ cd ~/catkin_ws && catkin_make
 
 ```sh
 (Real Hardware)
+# Have not been tested yet.
 # Bringup
-$ roslaunch ur_rh_bringup ur_rh_bringup.launch
+# $ roslaunch ur_rh_bringup ur_rh_bringup.launch
 # MoveIt
-$ roslaunch ur_rh_moveit_config move_group.launch
-$ roslaunch ur_rh_moveit_config moveit_rviz.launch
+# $ roslaunch ur_rh_moveit_config move_group.launch
+# $ roslaunch ur_rh_moveit_config moveit_rviz.launch
 
 (Gazebo Simulation)
 # Gazebo
