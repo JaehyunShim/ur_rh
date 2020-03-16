@@ -3,7 +3,7 @@
 ### Install ROS Melodic
 ```sh
 $ sudo apt-get update && sudo apt-get upgrade
-$ wget https://raw.githubusercontent.com/rjshim/robotis_engineer/master/install_ros_melodic.sh && chmod 755 ./install_ros_melodic.sh && bash ./install_ros_melodic.sh
+$ wget https://raw.githubusercontent.com/rjshim/ur_rh/master/install_ros_melodic.sh && chmod 755 ./install_ros_melodic.sh && bash ./install_ros_melodic.sh
 ```
 
 ### Install ROS packages and Build
